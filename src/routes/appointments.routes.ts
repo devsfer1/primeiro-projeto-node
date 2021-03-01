@@ -28,6 +28,8 @@ appointmentsRouter.post('/', (req, res) => {
       date: parsedDate,
       provider,
     });
+
+    return res.json(appointment);
   } catch(err) {
     return res.status(400).json({ error: err.message });
   }
