@@ -3,10 +3,11 @@ import { parseISO } from 'date-fns';
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
-import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
 const appointmentsRepository = new AppointmentsRepository();
+
+// Rota: Receber a requisição, chamar outro arquivo, devolver uma resposta
 
 appointmentsRouter.get('/', (req, res) => {
   const appointments = appointmentsRepository.all();
@@ -20,20 +21,14 @@ appointmentsRouter.post('/', (req, res) => {
 
     const parsedDate = parseISO(date);
 
-    const CreateAppointment = new CreateAppointmentService (
-      appointmentsRepository,
-    );
+    const createAppointment = new CreateAppointmentService(appointmentsRepository);
 
-    const appointment = CreateAppointment.execute({
-      date: parsedDate,
-      provider,
-    });
+    const appointment = createAppointment.execute({ date: parsedDate, provider});
 
     return res.json(appointment);
-  } catch(err) {
+  } catch (err) {
     return res.status(400).json({ error: err.message });
   }
 });
-
 
 export default appointmentsRouter;
